@@ -20,11 +20,11 @@ animations = []
 def draw():
     global items, game_over, game_complete, current_level
     screen.clear()
-    screen.blit("background", (0, 0))
+    screen.blit("galaxy", (0, 0))
     if game_over:
-        print("Game over, try again")
+        display_message("Game over"," try again")
     elif game_complete:
-        print("Congrats, the game is complete!")
+        display_message("Congrats"," the game is complete!")
     else:
         for i in items:
             i.draw()
@@ -50,7 +50,7 @@ def get_options_to_create(number_of_extra_items):
 def create_items(items_to_create):
     new_items = []
     for option in items_to_create:
-        item =Actor(option + "img")
+        item =Actor(option)
         new_items.append(item)
     return new_items
 
@@ -64,11 +64,12 @@ def layout_items(items_to_layout):
 
 def animate_items(items_to_animate):
     global animations
+    animations = []
     for item in items_to_animate:
         duration = START_SPEED - current_level
         item.anchor = ("center", "bottom")
-        animations = animate(item, duration = duration, on_finished = handle_game_over, y = HEIGHT)
-        animations.append(animations)
+        anim = animate(item, duration = duration, on_finished = handle_game_over, y = HEIGHT)
+        animations.append(anim)
 
 def handle_game_over():
     global game_over
@@ -79,9 +80,9 @@ def on_mouse_down(pos):
     for item in items:
         if item.collidepoint(pos):
             if "paper" in item.image:
-                handle_game_complete
+                handle_game_complete()
             else:
-                handle_game_over
+                handle_game_over()
 
 def handle_game_complete():
     global current_level, items, animations, game_complete
@@ -98,7 +99,7 @@ def stop_animations(animations_to_stop):
             animation.stop()
 
 def display_message(heading_text, sub_heading_text):
-    screen.draw.text(heading_text, fontsize = 60, centre = CENTRE, color = "white")
-    screen.draw.text(sub_heading_text, fontsize = 30, centre = (CENTRE_X, CENTRE_Y +30), color = "white")
+    screen.draw.text(heading_text, fontsize = 60, center = CENTRE, color = "white")
+    screen.draw.text(sub_heading_text, fontsize = 30, center = (CENTRE_X, CENTRE_Y +30), color = "white")
 
 pgzrun.go()
